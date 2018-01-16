@@ -1,17 +1,23 @@
-====== Taiko reverse engineering project
+Taiko reverse engineering project
+======
 
------- Tools:
+Tools:
+------
 
 ### sheet viewer
 allows you to view the contents of a Taiko no Tatsujin note sheet file, currently with support for the "newsht" format (Wii 4/5, PSP, or anything newer than those)
+
+
 
 requires `SkiaSharp` and `SkiaSharp.Views` from nuget. it should probably tell you that by default but I dunno
 
 namco plz don't sue me I love your games so much
 
------- RE list in order of priority
 
-### track format (bin in sheet/newsht) MOSTLY COMPLETE
+RE list in order of priority
+------
+
+#### track format (bin in sheet/newsht) MOSTLY COMPLETE
 - still need to work out the rest of the note types, as well as the changey ex tracks
 - BUT WHAT IS NOTETYPE 0x00000083?!
 
