@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 
+//TODO::uh like any error checking at all
+
 namespace TaikoSheetReader2 {
     public struct Bar {
         public float Speed;
@@ -25,6 +27,8 @@ namespace TaikoSheetReader2 {
 
         public float NoteLength;
         public float NoteLengthUnknown;
+
+        public short RequiredHits;
     }
 
     public struct SongData {
@@ -35,19 +39,19 @@ namespace TaikoSheetReader2 {
 
     class NewShtReader {
         static readonly Dictionary<byte, string> NoteType = new Dictionary<byte, string>() {
-            { 0x00,     "None"       },
-            { 0x01,     "Don"        },
-            { 0x02,     "Don"        },
-            { 0x03,     "Don"        },
-            { 0x04,     "Katsu"      },
-            { 0x05,     "Katsu"      },
-            { 0x06,     "Roll"       },
-            { 0x07,     "LargeDon"   },
-            { 0x08,     "LargeKatsu" },
-            { 0x09,     "LargeRoll"  },
-            { 0x10,     "Balloon"    },
-            { 0x11,     "Dumpling"   },
-            { 0x0C,     "PartyBall"  }
+            { 00,     "None"       },
+            { 01,     "Don"        },
+            { 02,     "Don"        },
+            { 03,     "Don"        },
+            { 04,     "Katsu"      },
+            { 05,     "Katsu"      },
+            { 06,     "Roll"       },
+            { 07,     "LargeDon"   },
+            { 08,     "LargeKatsu" },
+            { 09,     "LargeRoll"  },
+            { 10,     "Yam"        },
+            { 11,     "Balloon"    },
+            { 0x0C,   "PartyBall"  }
         };
         public static string GetNoteType(byte code) {
             string name;
@@ -116,13 +120,14 @@ namespace TaikoSheetReader2 {
                                 NoteLengthUnknown = length2,
                                 OffsetMs = noteoffset,
                                 Points = s1,
-                                PointBonus = s2
+                                PointBonus = s2,
+                                RequiredHits = 0
                             };
 
                         //dumplings and the like are also different
-                        //this is a dumpling specifically though
+                        //this is a balloon specifically though
                         //more testing required for other types
-                        } else if (notetype == 10) {
+                        } else if (notetype == 10 || notetype == 0x0C) {
                             float length1 = ReadFloat(fs);
 
                             notes[n] = new Note {
@@ -130,8 +135,9 @@ namespace TaikoSheetReader2 {
                                 NoteLength = length1,
                                 NoteLengthUnknown = -1,
                                 OffsetMs = noteoffset,
-                                Points = s1,
-                                PointBonus = s2
+                                Points = 0,
+                                PointBonus = s2,
+                                RequiredHits = s1
                             };
 
                         //nothing special in here
@@ -142,7 +148,8 @@ namespace TaikoSheetReader2 {
                                 NoteLengthUnknown = -1,
                                 OffsetMs = noteoffset,
                                 Points = s1,
-                                PointBonus = s2
+                                PointBonus = s2,
+                                RequiredHits = 0
                             };
 
                             fs.Seek(4, SeekOrigin.Current);
