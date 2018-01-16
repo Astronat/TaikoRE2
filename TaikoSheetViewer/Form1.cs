@@ -10,8 +10,7 @@ using System.Windows.Forms;
 using SkiaSharp;
 using SkiaSharp.Views.Desktop;
 using TaikoSheetReader2;
-using OpenTK;
-
+using System.IO;
 
 namespace WindowsFormsApp1 {
     public partial class Form1 : Form {
@@ -29,7 +28,7 @@ namespace WindowsFormsApp1 {
         long lastMouseX = 0;
 
         //the current scale
-        int scale = 200;
+        int scale = 100;
 
         bool isMouseDown = false;
 
@@ -48,8 +47,8 @@ namespace WindowsFormsApp1 {
         //Form has loaded
         private void Form1_Load(object sender, EventArgs e) {
             //temporary hard coded meemee
-            string fn = @"J:\Taiko\wii5 sheets\sheet\newsht\solo\linda_h.bin";
-            
+            string fn = @"J:\Taiko\wii4 sheets\sheet\newsht\solo\marumo_m.bin";
+            FileInfo fi = new FileInfo(fn);
             //read the sheet
             sheet = NewShtReader.ReadSheet(fn);
 
@@ -58,7 +57,7 @@ namespace WindowsFormsApp1 {
             foreach (Bar b in sheet.Bars) { nc += b.NoteCount; }
             
             //Change the window title to show the file name, bar count and note count
-            Text = fn + " " + sheet.BarCount +" bars | " + nc + " notes";
+            Text =  fi.Name + " " + sheet.BarCount +" bars | " + nc + " notes";
 
             BarRect = new SKRect(0, 0, Size.Width, 30);
 
